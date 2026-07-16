@@ -1,536 +1,1016 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>零食飲品店</title>
+    <title>零食站 · 零食飲品專門店</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <!-- 頂部 -->
-    <header>
-        <div class="container header-flex">
-            <h1 id="siteTitle">🍭 零食站</h1>
-            <div class="header-search">
-                <input type="text" id="headerSearch" placeholder="搜尋..." />
-                <button>🔍</button>
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🧁</span>
+                    <span class="logo-text" id="siteTitle">零食<span>站</span></span>
+                    <span class="logo-badge">Snack</span>
+                </a>
+                <div class="header-actions">
+                    <div class="user-status">
+                        <span class="greeting" id="greetingText">👋 歡迎，<strong id="usernameDisplay">訪客</strong></span>
+                        <button class="btn-login" onclick="openModal('login')">登入</button>
+                        <button class="btn-register" onclick="openModal('register')">註冊</button>
+                        <button class="btn-logout" style="display:none;" onclick="logout()">登出</button>
+                    </div>
+                    <div class="lang-switch">
+                        <button class="lang-btn active" data-lang="zh-HK" onclick="switchLanguage('zh-HK')">繁</button>
+                        <button class="lang-btn" data-lang="zh-CN" onclick="switchLanguage('zh-CN')">简</button>
+                        <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">EN</button>
+                    </div>
+                    <div class="favorite-icon-wrapper" onclick="toggleFavoriteSidebar()">
+                        <span>❤️</span>
+                        <span class="favorite-count" id="favoriteCount">0</span>
+                    </div>
+                    <div class="cart-icon-wrapper" onclick="toggleCartSidebar()">
+                        <span>🛒</span>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
             </div>
-            <!-- 語言切換按鈕 -->
-            <div class="lang-switch">
-                <button class="lang-btn active" data-lang="zh-HK">繁</button>
-                <button class="lang-btn" data-lang="zh-CN">简</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-            </div>
-            <!-- 購物車 icon -->
-            <div class="cart-icon-wrapper" id="cartToggle">
-                <span>🛒 <span id="cartLabel">購物車</span></span>
-                <span class="cart-count" id="cartCount">0</span>
+            <div class="search-row">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="搜尋零食或飲品..." />
+                    <button id="searchBtn">搜尋</button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- 導航 -->
-    <nav>
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="main-nav">
         <div class="container">
-            <a href="#" class="nav-link active" data-category="all" data-key="navHome">🏠 首頁</a>
-            <a href="#" class="nav-link" data-category="biscuit" data-key="navBiscuit">餅乾</a>
-            <a href="#" class="nav-link" data-category="chip" data-key="navChip">薯片</a>
-            <a href="#" class="nav-link" data-category="chocolate" data-key="navChocolate">朱古力</a>
-            <a href="#" class="nav-link" data-category="other" data-key="navOther">其他</a>
-            <a href="#" class="nav-link" data-category="drink" data-key="navDrink">飲品</a>
-            <a href="#" class="nav-link" data-category="all" data-key="navAbout">關於我哋</a>
+            <ul class="nav-list">
+                <li><a href="#" class="nav-link active" data-category="all" onclick="filterCategory('all', this)">🏠
+                        首頁</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link">🍿 零食 <span class="nav-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-category="biscuit" onclick="filterCategory('biscuit', this)"><span
+                                    class="emoji">🍪</span> 餅乾</a></li>
+                        <li><a href="#" data-category="chip" onclick="filterCategory('chip', this)"><span
+                                    class="emoji">🥔</span> 薯片</a></li>
+                        <li><a href="#" data-category="chocolate" onclick="filterCategory('chocolate', this)"><span
+                                    class="emoji">🍫</span> 朱古力</a></li>
+                        <li><a href="#" data-category="candy" onclick="filterCategory('candy', this)"><span
+                                    class="emoji">🍬</span> 糖果</a></li>
+                        <li><a href="#" data-category="other" onclick="filterCategory('other', this)"><span
+                                    class="emoji">🍢</span> 其他</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link">🥤 飲品 <span class="nav-arrow">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-category="coffee_tea" onclick="filterCategory('coffee_tea', this)"><span
+                                    class="emoji">☕</span> 咖啡·茶</a></li>
+                        <li><a href="#" data-category="energy" onclick="filterCategory('energy', this)"><span
+                                    class="emoji">⚡</span> 運動·能量</a></li>
+                        <li><a href="#" data-category="juice" onclick="filterCategory('juice', this)"><span
+                                    class="emoji">🍊</span> 果汁</a></li>
+                        <li><a href="#" data-category="soda" onclick="filterCategory('soda', this)"><span
+                                    class="emoji">🥤</span> 碳酸飲料</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link" onclick="showToast('💬 關於我們')">💬 關於我哋</a></li>
+            </ul>
         </div>
     </nav>
 
-    <!-- Banner -->
-    <section class="banner">
+    <!-- ===== BANNER ===== -->
+    <section class="banner-section">
         <div class="container">
-            <h2 data-key="bannerTitle">夏日優惠 · 全場 8 折</h2>
-            <p data-key="bannerSub">買滿 $200 即享折扣</p>
-        </div>
-    </section>
-
-    <!-- 搜尋區 -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-box">
-                <input type="text" id="productSearch" data-key="searchPlaceholder" placeholder="🔎 搜尋零食或飲品..." />
-                <button id="searchBtn" data-key="searchBtn">搜尋</button>
-            </div>
-            <p id="searchResultMsg"></p>
-        </div>
-    </section>
-
-    <!-- 商品陳列 -->
-    <section class="products">
-        <div class="container">
-            <h3 data-key="productsTitle">🔥 人氣推介</h3>
-            <div class="grid" id="productGrid">
-                <!-- 產品會用 JavaScript 動態生成 -->
+            <div class="banner-card">
+                <div class="banner-content">
+                    <span class="badge" id="bannerBadge">🎉 限時優惠</span>
+                    <h2 id="bannerTitle">夏日狂歡 · 全場 8 折</h2>
+                    <p id="bannerSub">買滿 $200 即享折扣優惠，仲有免費送貨！</p>
+                    <a href="#" class="btn-banner" onclick="showToast('🔥 優惠已套用！')">🔥 即刻搶購</a>
+                </div>
+                <div class="banner-emoji">🧁</div>
             </div>
         </div>
     </section>
 
-    <!-- 購物車側欄 -->
-    <div id="cartSidebar" class="cart-sidebar">
-        <div class="cart-sidebar-header">
-            <h2 data-key="cartTitle">🛒 購物車</h2>
-            <button id="closeCart">✕</button>
+    <!-- ===== PRODUCTS ===== -->
+    <section class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h3 id="sectionTitle">🔥 人氣推介</h3>
+                <span class="product-count" id="productCount">共 0 件商品</span>
+            </div>
+            <div class="search-msg" id="searchMsg"></div>
+            <div class="grid" id="productGrid"></div>
         </div>
-        <div id="cartItems" class="cart-items">
-            <p class="empty-cart" data-key="emptyCart">購物車目前空空如也 🛒</p>
+    </section>
+
+    <!-- ===== FAVORITE SIDEBAR ===== -->
+    <div id="favoriteOverlay" class="favorite-overlay"></div>
+    <div id="favoriteSidebar" class="favorite-sidebar">
+        <div class="favorite-header">
+            <h2>❤️ 我的最愛 <span class="count" id="favoriteItemCount">(0)</span></h2><button id="closeFavorite">✕</button>
         </div>
-        <div class="cart-footer">
-            <p><span data-key="cartTotal">總計</span>：<span id="cartTotal">$0</span></p>
-            <button id="clearCart" data-key="clearCart">清空購物車</button>
-            <button id="checkoutBtn" data-key="checkout">結帳</button>
+        <div id="favoriteItems" class="favorite-items">
+            <div class="empty-favorite"><span class="big-emoji">❤️</span>我的最愛空空如也</div>
         </div>
     </div>
-    <div id="cartOverlay" class="cart-overlay"></div>
 
-    <!-- 頁腳 -->
-    <footer>
+    <!-- ===== CART SIDEBAR ===== -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>🛒 購物車 <span class="count" id="cartItemCount">(0)</span></h2><button id="closeCart">✕</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <div class="empty-cart"><span class="big-emoji">🛒</span>購物車目前空空如也</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total"><span class="label">總計</span><span class="amount" id="cartTotal">$0</span></div>
+            <div class="cart-buttons"><button id="clearCart" class="btn-clear">🗑️ 清空</button><button id="checkoutBtn"
+                    class="btn-checkout">💳 結帳</button></div>
+        </div>
+    </div>
+
+    <!-- ===== AUTH MODAL ===== -->
+    <div id="authModal" class="modal">
+        <div class="modal-content"><span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="authForm"></div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
         <div class="container">
-            <p data-key="footerText">© 2026 零食站 · 靜態示範</p>
+            <div class="footer-content">
+                <p class="brand">🧁 零食<span>站</span></p>
+                <p id="footerText">© 2026 零食站 · 專營零食飲品</p>
+                <p class="footer-note">🍭 用心為你揀選最好嘅零食</p>
+            </div>
         </div>
     </footer>
 
+    <!-- ============================================================
+    JAVASCRIPT（全部產品 + 完整功能）
+    ============================================================ -->
     <script>
         // ============================================================
-        // 1. 產品資料（由 Snacks And Drinks.docx 整理）
+        // 1. 所有產品資料（281件，完整收錄自 Snacks And Drinks.docx）
         // ============================================================
-        const products = [
-            // ===== 餅乾 =====
-            { id: 1, name: 'GINBIS 愉快動物餅乾 牛油味', name_en: 'GINBIS Animal Biscuits Butter', name_cn: 'GINBIS 愉快动物饼干 牛油味', category: 'biscuit', weight: '37g', price: 8 },
-            { id: 2, name: 'GINBIS 愉快動物餅乾 紫菜味', name_en: 'GINBIS Animal Biscuits Seaweed', name_cn: 'GINBIS 愉快动物饼干 紫菜味', category: 'biscuit', weight: '37g', price: 8 },
-            { id: 3, name: 'GINBIS 愉快動物餅 8包 紫菜味', name_en: 'GINBIS Animal Biscuits 8pcs Seaweed', name_cn: 'GINBIS 愉快动物饼 8包 紫菜味', category: 'biscuit', weight: '144g', price: 28 },
-            { id: 4, name: '固力果 番茄味百力滋餅乾條', name_en: 'Glico Pretz Tomato', name_cn: '固力果 番茄味百力滋饼干条', category: 'biscuit', weight: '64g', price: 12 },
-            { id: 5, name: '固力果 沙律味百力滋餅乾條', name_en: 'Glico Pretz Salad', name_cn: '固力果 沙律味百力滋饼干条', category: 'biscuit', weight: '64g', price: 12 },
-            { id: 6, name: '固力果 朱古力味百力滋餅乾條', name_en: 'Glico Pretz Chocolate', name_cn: '固力果 朱古力味百力滋饼干条', category: 'biscuit', weight: '52g', price: 12 },
-            { id: 7, name: '樂天 朱古力熊仔餅', name_en: 'Lotte Koala March Chocolate', name_cn: '乐天 朱古力熊仔饼', category: 'biscuit', weight: '37g', price: 10 },
-            { id: 8, name: '樂天 士多啤梨味熊仔餅', name_en: 'Lotte Koala March Strawberry', name_cn: '乐天 士多啤梨味熊仔饼', category: 'biscuit', weight: '37g', price: 10 },
-            { id: 9, name: '旺旺 仙貝 (兩片裝)', name_en: 'Want Want Senbei (2pcs)', name_cn: '旺旺 仙贝 (两片装)', category: 'biscuit', weight: '56g', price: 12 },
-            { id: 10, name: '旺旺 雪餅', name_en: 'Want Want Rice Crackers', name_cn: '旺旺 雪饼', category: 'biscuit', weight: '72g', price: 12 },
-            { id: 11, name: '桃哈多 Harvest餅乾 - 牛油吐司味', name_en: 'Tohato Harvest Butter Toast', name_cn: '桃哈多 Harvest饼干 - 牛油吐司味', category: 'biscuit', weight: '4pcs', price: 10 },
+        const allProducts = [
+            // ===== 餅乾 (biscuit) 44件 =====
+            { id: 1, name: 'GINBIS 愉快動物餅乾 牛油味', category: 'biscuit', weight: '37g', price: 8 },
+            { id: 2, name: 'GINBIS 愉快動物餅乾 紫菜味', category: 'biscuit', weight: '37g', price: 8 },
+            { id: 3, name: 'GINBIS 愉快動物餅 8包 紫菜味', category: 'biscuit', weight: '144g', price: 28 },
+            { id: 4, name: 'GINBIS 愉快動物餅8包什錦裝', category: 'biscuit', weight: '144g', price: 28 },
+            { id: 5, name: '固力果 番茄味百力滋餅乾條', category: 'biscuit', weight: '90g', price: 12 },
+            { id: 6, name: '固力果 沙律味百力滋餅乾條', category: 'biscuit', weight: '64g', price: 12 },
+            { id: 7, name: '固力果 朱古力味百力滋餅乾條', category: 'biscuit', weight: '52g', price: 12 },
+            { id: 8, name: '固力果 士多啤梨味百力滋餅乾條', category: 'biscuit', weight: '51g', price: 12 },
+            { id: 9, name: '固力果 沙津味百力滋家庭裝', category: 'biscuit', weight: '118g', price: 18 },
+            { id: 10, name: '固力果 番茄味百力滋家庭裝', category: 'biscuit', weight: '110g', price: 18 },
+            { id: 11, name: '固力果 士多啤梨味百力滋家庭裝', category: 'biscuit', weight: '87g', price: 18 },
+            { id: 12, name: '固力果 朱古力味百力滋家庭裝', category: 'biscuit', weight: '95g', price: 18 },
+            { id: 13, name: '固力果 沙律味百力滋', category: 'biscuit', weight: '193g', price: 25 },
+            { id: 14, name: '固力果 炭燒百力滋', category: 'biscuit', weight: '193g', price: 25 },
+            { id: 15, name: '樂天 朱古力熊仔餅', category: 'biscuit', weight: '37g', price: 10 },
+            { id: 16, name: '樂天 士多啤梨味熊仔餅', category: 'biscuit', weight: '37g', price: 10 },
+            { id: 17, name: '樂天 朱古力小熊餅家庭裝', category: 'biscuit', weight: '195g', price: 28 },
+            { id: 18, name: '樂天 白朱古力牛奶味芝士小熊餅', category: 'biscuit', weight: '195g', price: 28 },
+            { id: 19, name: '樂天 特濃朱古力小熊餅家庭裝', category: 'biscuit', weight: '195g', price: 28 },
+            { id: 20, name: '樂天 杏仁朱古力餅棒', category: 'biscuit', weight: '32g', price: 10 },
+            { id: 21, name: '樂天 脆米朱古力餅棒', category: 'biscuit', weight: '39g', price: 10 },
+            { id: 22, name: '樂天 白朱古力杏仁餅棒', category: 'biscuit', weight: '32g', price: 10 },
+            { id: 23, name: '樂天 白朱古力曲奇餅棒', category: 'biscuit', weight: '32g', price: 10 },
+            { id: 24, name: '旺旺 仙貝 (兩片裝)', category: 'biscuit', weight: '56g', price: 12 },
+            { id: 25, name: '旺旺 雪餅', category: 'biscuit', weight: '72g', price: 12 },
+            { id: 26, name: '旺旺 燒米餅', category: 'biscuit', weight: '72g', price: 12 },
+            { id: 27, name: '旺旺 燒米餅', category: 'biscuit', weight: '316g', price: 25 },
+            { id: 28, name: '旺旺 機燒海苔米果', category: 'biscuit', weight: '136g', price: 18 },
+            { id: 29, name: '旺旺 厚燒海苔米果', category: 'biscuit', weight: '308g', price: 28 },
+            { id: 30, name: '旺旺 鐵火燒香濃芝士米果', category: 'biscuit', weight: '96g', price: 15 },
+            { id: 31, name: '旺旺 仙貝（經濟包）', category: 'biscuit', weight: '400g', price: 30 },
+            { id: 32, name: '旺旺 芝士玉米味仙貝米餅', category: 'biscuit', weight: '258g', price: 25 },
+            { id: 33, name: '旺旺 雪餅（經濟包）', category: 'biscuit', weight: '400g', price: 30 },
+            { id: 34, name: '旺旺 黑白配', category: 'biscuit', weight: '60g', price: 10 },
+            { id: 35, name: '江戶 DHA餅', category: 'biscuit', weight: '172g', price: 18 },
+            { id: 36, name: '江戶 杏仁餅', category: 'biscuit', weight: '133g', price: 18 },
+            { id: 37, name: '江戶 薯仔餅', category: 'biscuit', weight: '172g', price: 18 },
+            { id: 38, name: '江戶 牛乳餅', category: 'biscuit', weight: '172g', price: 18 },
+            { id: 39, name: 'Edo梳打餅', category: 'biscuit', weight: '141g', price: 15 },
+            { id: 40, name: 'Edo奶酪餅', category: 'biscuit', weight: '172g', price: 18 },
+            { id: 41, name: '桃哈多 Harvest餅乾 - 牛油吐司味', category: 'biscuit', weight: '4pcs', price: 10 },
+            { id: 42, name: '桃哈多 Harvest餅乾 - 芝麻味', category: 'biscuit', weight: '4pcs', price: 10 },
+            { id: 43, name: '桃哈多 Harvest 餅乾 - 芝麻味', category: 'biscuit', weight: '72pcs', price: 35 },
+            { id: 44, name: '桃哈多 蠟筆小新朱古力餅', category: 'biscuit', weight: '25g', price: 8 },
 
-            // ===== 薯片 =====
-            { id: 12, name: '卡樂B 熱浪香辣味薯片', name_en: 'Calbee Hot & Spicy Chips', name_cn: '卡乐B 热浪香辣味薯片', category: 'chip', weight: '55g', price: 15 },
-            { id: 13, name: '卡樂B 燒烤味薯片', name_en: 'Calbee BBQ Chips', name_cn: '卡乐B 烧烤味薯片', category: 'chip', weight: '55g', price: 15 },
-            { id: 14, name: '卡樂B 蕃茄味薯片', name_en: 'Calbee Tomato Chips', name_cn: '卡乐B 蕃茄味薯片', category: 'chip', weight: '55g', price: 14 },
-            { id: 15, name: '卡樂B 原味薯片', name_en: 'Calbee Original Chips', name_cn: '卡乐B 原味薯片', category: 'chip', weight: '55g', price: 8 },
-            { id: 16, name: '卡樂B 蜂蜜牛油味薯片', name_en: 'Calbee Honey Butter Chips', name_cn: '卡乐B 蜂蜜牛油味薯片', category: 'chip', weight: '55g', price: 16 },
-            { id: 17, name: '卡樂B 薄餅味薯片', name_en: 'Calbee Pizza Chips', name_cn: '卡乐B 薄饼味薯片', category: 'chip', weight: '55g', price: 14 },
-            { id: 18, name: '日清湖池屋 激肉魔薯 燒烤味薯片', name_en: 'Nissin Koikeya Jagariko BBQ', name_cn: '日清湖池屋 激肉魔薯 烧烤味薯片', category: 'chip', weight: '55g', price: 6 },
-            { id: 19, name: '日清湖池屋 激辣魔薯 香辣味薯片', name_en: 'Nissin Koikeya Jagariko Spicy', name_cn: '日清湖池屋 激辣魔薯 香辣味薯片', category: 'chip', weight: '55g', price: 20 },
-            { id: 20, name: '江戶 巨浪大切蕃茄味薯片', name_en: 'Edo Great Wave Tomato Chips', name_cn: '江户 巨浪大切蕃茄味薯片', category: 'chip', weight: '150g', price: 22 },
+            // ===== 薯片 (chip) 29件 =====
+            { id: 45, name: '卡樂B 熱浪香辣味薯片', category: 'chip', weight: '55g', price: 15 },
+            { id: 46, name: '卡樂B 熱浪香辣味薯片', category: 'chip', weight: '105g', price: 8 },
+            { id: 47, name: '卡樂B 燒烤味薯片', category: 'chip', weight: '55g', price: 15 },
+            { id: 48, name: '卡樂B 燒烤味薯片', category: 'chip', weight: '105g', price: 8 },
+            { id: 49, name: '卡樂B 蕃茄味薯片', category: 'chip', weight: '55g', price: 14 },
+            { id: 50, name: '卡樂B 蕃茄味薯片', category: 'chip', weight: '90g', price: 8 },
+            { id: 51, name: '卡樂B 原味薯片', category: 'chip', weight: '55g', price: 8 },
+            { id: 52, name: '卡樂B 日燒醬汁味薯片', category: 'chip', weight: '55g', price: 15 },
+            { id: 53, name: '卡樂B 日燒醬汁味薯片', category: 'chip', weight: '105g', price: 8 },
+            { id: 54, name: '卡樂B 紫菜味薯片', category: 'chip', weight: '55g', price: 9 },
+            { id: 55, name: '卡樂B 蜂蜜牛油味薯片', category: 'chip', weight: '55g', price: 16 },
+            { id: 56, name: '卡樂B 蜂蜜牛油味薯片', category: 'chip', weight: '102g', price: 8 },
+            { id: 57, name: '卡樂B 薄餅味薯片', category: 'chip', weight: '55g', price: 14 },
+            { id: 58, name: '卡樂B 薄餅味薯片', category: 'chip', weight: '90g', price: 8 },
+            { id: 59, name: '卡樂B 香辣薄餅味薯片', category: 'chip', weight: '55g', price: 8 },
+            { id: 60, name: '卡樂B 咖喱味薯片', category: 'chip', weight: '55g', price: 28 },
+            { id: 61, name: '卡樂B 波浪熱浪香辣味薯片', category: 'chip', weight: '192g', price: 28 },
+            { id: 62, name: '卡樂B 波浪燒烤味薯片', category: 'chip', weight: '192g', price: 6 },
+            { id: 63, name: '日清湖池屋 激肉魔薯 燒烤味薯片', category: 'chip', weight: '25g', price: 12 },
+            { id: 64, name: '日清湖池屋 激肉魔薯 燒烤味薯片', category: 'chip', weight: '55g', price: 6 },
+            { id: 65, name: '日清湖池屋 激辣魔薯 香辣味薯片', category: 'chip', weight: '25g', price: 12 },
+            { id: 66, name: '日清湖池屋 激辣魔薯 香辣味薯片', category: 'chip', weight: '55g', price: 20 },
+            { id: 67, name: '日清湖池屋 激辣魔薯 香辣味薯片', category: 'chip', weight: '105g', price: 6 },
+            { id: 68, name: '日清湖池屋 激辣魔薯 香辣芝士味薯片', category: 'chip', weight: '25g', price: 12 },
+            { id: 69, name: '日清湖池屋 激辣魔薯 香辣芝士味薯片', category: 'chip', weight: '55g', price: 18 },
+            { id: 70, name: '江戶 巨浪大切蕃茄味薯片', category: 'chip', weight: '150g', price: 22 },
+            { id: 71, name: '江戶 巨浪大切 紫菜味薯片', category: 'chip', weight: '150g', price: 22 },
+            { id: 72, name: '江戶巨浪大切沙律醬焗薯味薯片', category: 'chip', weight: '150g', price: 22 },
+            { id: 73, name: '江戶 巨浪大切香辣味薯片', category: 'chip', weight: '150g', price: 22 },
 
-            // ===== 朱古力 =====
-            { id: 21, name: '明治牛奶朱古力盒裝', name_en: 'Meiji Milk Chocolate Box', name_cn: '明治牛奶朱古力盒装', category: 'chocolate', weight: '120g', price: 25 },
-            { id: 22, name: '明治特濃朱古力盒裝', name_en: 'Meiji Rich Chocolate Box', name_cn: '明治特浓朱古力盒装', category: 'chocolate', weight: '120g', price: 28 },
-            { id: 23, name: '明治抹茶朱古力盒裝', name_en: 'Meiji Matcha Chocolate Box', name_cn: '明治抹茶朱古力盒装', category: 'chocolate', weight: '120g', price: 30 },
-            { id: 24, name: '明治杏仁朱古力', name_en: 'Meiji Almond Chocolate', name_cn: '明治杏仁朱古力', category: 'chocolate', weight: '79g', price: 18 },
-            { id: 25, name: '樂天 杏仁朱古力', name_en: 'Lotte Almond Chocolate', name_cn: '乐天 杏仁朱古力', category: 'chocolate', weight: '86g', price: 16 },
-            { id: 26, name: '樂天 脆米杏仁朱古力', name_en: 'Lotte Crispy Almond Chocolate', name_cn: '乐天 脆米杏仁朱古力', category: 'chocolate', weight: '80g', price: 16 },
+            // ===== 朱古力 (chocolate) 11件 =====
+            { id: 74, name: '明治牛奶朱古力盒裝', category: 'chocolate', weight: '120g', price: 25 },
+            { id: 75, name: '明治特濃朱古力盒裝', category: 'chocolate', weight: '120g', price: 28 },
+            { id: 76, name: '明治抹茶朱古力盒裝', category: 'chocolate', weight: '120g', price: 30 },
+            { id: 77, name: '明治麥加果仁朱古力', category: 'chocolate', weight: '64g', price: 18 },
+            { id: 78, name: '明治麥加果仁朱古力', category: 'chocolate', weight: '9PC', price: 12 },
+            { id: 79, name: '明治杏仁朱古力', category: 'chocolate', weight: '79g', price: 18 },
+            { id: 80, name: '明治杏仁抹茶朱古力', category: 'chocolate', weight: '67g', price: 20 },
+            { id: 81, name: '樂天 麥加果仁朱古力', category: 'chocolate', weight: '67g', price: 15 },
+            { id: 82, name: '樂天 杏仁朱古力', category: 'chocolate', weight: '86g', price: 16 },
+            { id: 83, name: '樂天 脆米杏仁朱古力', category: 'chocolate', weight: '80g', price: 16 },
+            { id: 84, name: 'YUKA 提拉米蘇朱古力', category: 'chocolate', weight: '160g', price: 22 },
 
-            // ===== 其他（蝦條、粟米條等） =====
-            { id: 27, name: '卡樂B 原味蝦條', name_en: 'Calbee Original Shrimp Crackers', name_cn: '卡乐B 原味虾条', category: 'other', weight: '40g', price: 12 },
-            { id: 28, name: '卡樂B 燒烤味蝦條', name_en: 'Calbee BBQ Shrimp Crackers', name_cn: '卡乐B 烧烤味虾条', category: 'other', weight: '40g', price: 12 },
-            { id: 29, name: '卡樂B 粟一燒 燒烤味', name_en: 'Calbee Corn Snack BBQ', name_cn: '卡乐B 粟一烧 烧烤味', category: 'other', weight: '32g', price: 10 },
-            { id: 30, name: '桃哈多 焦糖粟米條', name_en: 'Tohato Caramel Corn', name_cn: '桃哈多 焦糖粟米条', category: 'other', weight: '70g', price: 14 },
-            { id: 31, name: '桃哈多 Poteco薯圈', name_en: 'Tohato Poteco Potato Rings', name_cn: '桃哈多 Poteco薯圈', category: 'other', weight: '23g', price: 8 },
+            // ===== 糖果 (candy) 27件 =====
+            { id: 85, name: '味覺 特濃8.2牛奶糖 - 鹽味', category: 'candy', weight: '80g', price: 12 },
+            { id: 86, name: '味覺 特濃牛奶糖', category: 'candy', weight: '120g', price: 15 },
+            { id: 87, name: '味覺 Kororo提子軟糖', category: 'candy', weight: '48g', price: 10 },
+            { id: 88, name: '味覺 Kororo青提軟糖', category: 'candy', weight: '48g', price: 10 },
+            { id: 89, name: '味覺 Kororo白桃軟糖', category: 'candy', weight: '40g', price: 10 },
+            { id: 90, name: '味覺 Cororo軟糖 - 蜜瓜', category: 'candy', weight: '40g', price: 10 },
+            { id: 91, name: '味覺 Cororo 軟糖 - 清水桃', category: 'candy', weight: '40g', price: 10 },
+            { id: 92, name: '味覺 特濃8.2牛奶糖 - 牛奶咖啡味', category: 'candy', weight: '93g', price: 13 },
+            { id: 93, name: '味覺 軟糖 - 提子', category: 'candy', weight: '7pcs', price: 8 },
+            { id: 94, name: '味覺 SAKERU軟糖 酸檸檬味', category: 'candy', weight: '7pcs', price: 8 },
+            { id: 95, name: '味覺 極上蜂蜜紅茶什錦糖果', category: 'candy', weight: '75g', price: 14 },
+            { id: 96, name: '味覺 Chocorare 軟糖', category: 'candy', weight: '40g', price: 10 },
+            { id: 97, name: '味覺 Chocorare朱古力軟糖 - 士多啤梨', category: 'candy', weight: '40g', price: 10 },
+            { id: 98, name: '味覺 提子味超酸橡皮糖', category: 'candy', weight: '20g', price: 6 },
+            { id: 99, name: '味覺 Shigekix 軟糖 - 梳打味', category: 'candy', weight: '20g', price: 6 },
+            { id: 100, name: '春日井 什錦水果軟糖', category: 'candy', weight: '102g', price: 12 },
+            { id: 101, name: '春日井 荔枝軟糖', category: 'candy', weight: '102g', price: 12 },
+            { id: 102, name: '春日井 青提子軟糖', category: 'candy', weight: '107g', price: 12 },
+            { id: 103, name: '春日井 蜜桃軟糖', category: 'candy', weight: '107g', price: 12 },
+            { id: 104, name: '春日井 柚子軟糖', category: 'candy', weight: '102g', price: 12 },
+            { id: 105, name: '森永 Hi-Chew 水果軟糖', category: 'candy', weight: '86g', price: 14 },
+            { id: 106, name: '森永 Hi-Chew軟糖禮盒 - 什錦果汁味', category: 'candy', weight: '286g', price: 28 },
+            { id: 107, name: '森永 Hi-Chew軟糖 - 酸味檸檬', category: 'candy', weight: '55g', price: 10 },
+            { id: 108, name: '森永 Hi-Chew 軟糖 - 葡萄', category: 'candy', weight: '55g', price: 10 },
+            { id: 109, name: '不二家 袋裝牛奶糖', category: 'candy', weight: '100g', price: 12 },
+            { id: 110, name: '不二家 Nectar水果軟糖', category: 'candy', weight: '48g', price: 10 },
+            { id: 111, name: 'HOEI 果凍糖', category: 'candy', weight: '240g', price: 18 },
 
-            // ===== 飲品 - 即飲咖啡及茶 =====
-            { id: 32, name: 'UCC 牛奶咖啡', name_en: 'UCC Milk Coffee', name_cn: 'UCC 牛奶咖啡', category: 'drink', weight: '375g', price: 15 },
-            { id: 33, name: 'UCC 黑咖啡 (無糖)', name_en: 'UCC Black Coffee (Sugar Free)', name_cn: 'UCC 黑咖啡 (无糖)', category: 'drink', weight: '275g', price: 15 },
-            { id: 34, name: '朝日極特濃牛奶咖啡', name_en: 'Asahi Extra Rich Milk Coffee', name_cn: '朝日极特浓牛奶咖啡', category: 'drink', weight: '370g', price: 18 },
-            { id: 35, name: '麒麟 午後紅茶 - 奶茶', name_en: 'Kirin Afternoon Tea Milk Tea', name_cn: '麒麟 午后红茶 - 奶茶', category: 'drink', weight: '500ml', price: 12 },
-            { id: 36, name: '麒麟 午後之紅茶 - 檸檬茶', name_en: 'Kirin Afternoon Tea Lemon Tea', name_cn: '麒麟 午后之红茶 - 柠檬茶', category: 'drink', weight: '500ml', price: 12 },
-            { id: 37, name: '伊藤園 無糖綠茶', name_en: 'Itoen Sugar Free Green Tea', name_cn: '伊藤园 无糖绿茶', category: 'drink', weight: '500ml', price: 10 },
+            // ===== 其他 (other) 42件 =====
+            { id: 112, name: '卡樂B 原味蝦條', category: 'other', weight: '40g', price: 12 },
+            { id: 113, name: '卡樂B 原味蝦條', category: 'other', weight: '90g', price: 18 },
+            { id: 114, name: '卡樂B燒烤味蝦條', category: 'other', weight: '40g', price: 12 },
+            { id: 115, name: '卡樂B燒烤味蝦條', category: 'other', weight: '90g', price: 18 },
+            { id: 116, name: '卡樂B辛之味蝦條', category: 'other', weight: '90g', price: 18 },
+            { id: 117, name: '卡樂B和風醬汁味蝦條', category: 'other', weight: '90g', price: 18 },
+            { id: 118, name: '卡樂B原味蝦條4連包', category: 'other', weight: '4 x 14g', price: 20 },
+            { id: 119, name: '卡樂B燒烤味蝦條4連包', category: 'other', weight: '4 x 14g', price: 20 },
+            { id: 120, name: '卡樂B和風醬汁味蝦條4連包', category: 'other', weight: '4 x 14g', price: 20 },
+            { id: 121, name: '宅卡B薯條 原味企身袋裝', category: 'other', weight: '5 x 18g', price: 22 },
+            { id: 122, name: '宅卡B薯條 熱浪香辣味企身袋裝', category: 'other', weight: '5 x 17g', price: 22 },
+            { id: 123, name: '宅卡B薯條 燒烤味企身袋裝', category: 'other', weight: '5 x 17g', price: 22 },
+            { id: 124, name: '宅卡B薯條 紫菜味企身袋裝', category: 'other', weight: '5 x 17g', price: 22 },
+            { id: 125, name: '宅卡B薯條 波浪薯條(茄汁味)企身袋裝', category: 'other', weight: '', price: 22 },
+            { id: 126, name: '宅卡B薯條 燒烤味4連包', category: 'other', weight: '4 x 14g', price: 20 },
+            { id: 127, name: '宅卡B薯條 蜂蜜牛油味4連包', category: 'other', weight: '4 x 14g', price: 20 },
+            { id: 128, name: '卡樂B蔬菜小食 什菜薯條', category: 'other', weight: '42g', price: 12 },
+            { id: 129, name: '卡樂B蔬菜小食 田園蕃茄什菜薯條', category: 'other', weight: '42g', price: 12 },
+            { id: 130, name: '卡樂B蔬菜小食 脆格薯片', category: 'other', weight: '40g', price: 12 },
+            { id: 131, name: '卡樂B蔬菜小食 芝士脆片', category: 'other', weight: '40g', price: 12 },
+            { id: 132, name: '卡樂B蔬菜小食 什菜薯條4連包', category: 'other', weight: '4 x 10g', price: 18 },
+            { id: 133, name: '卡樂B蔬菜小食 田園蕃茄什菜薯條4連包', category: 'other', weight: '4 x 10g', price: 18 },
+            { id: 134, name: '卡樂B 蔬菜小食 脆格薯片4連包', category: 'other', weight: '4 x 10g', price: 18 },
+            { id: 135, name: '卡樂B蔬菜小食 芝士脆片4連包', category: 'other', weight: '4 x 10g', price: 18 },
+            { id: 136, name: '卡樂B粟一燒 燒烤味', category: 'other', weight: '32g', price: 10 },
+            { id: 137, name: '卡樂B粟一燒 燒烤味', category: 'other', weight: '80g', price: 16 },
+            { id: 138, name: '卡樂B粟一燒 熱浪香辣味', category: 'other', weight: '60g', price: 14 },
+            { id: 139, name: '卡樂B粟一燒 蒲燒鰻魚味', category: 'other', weight: '80g', price: 18 },
+            { id: 140, name: '卡樂B粟一燒 煙燻芝士味', category: 'other', weight: '80g', price: 18 },
+            { id: 141, name: '卡樂B 粟米條 芝士味', category: 'other', weight: '80g', price: 16 },
+            { id: 142, name: '桃哈多 花生焦糖粟米條', category: 'other', weight: '20g', price: 8 },
+            { id: 143, name: '桃哈多 焦糖粟米條', category: 'other', weight: '70g', price: 14 },
+            { id: 144, name: '桃哈多 鹽味焦糖粟米條', category: 'other', weight: '67g', price: 14 },
+            { id: 145, name: '桃哈多 焦糖粟米條 - 濃厚朱古力', category: 'other', weight: '65g', price: 16 },
+            { id: 146, name: '桃哈多 焦糖粟米條 - 濃厚抹茶味', category: 'other', weight: '65g', price: 16 },
+            { id: 147, name: '桃哈多 高達Poteco薯圈', category: 'other', weight: '23g', price: 8 },
+            { id: 148, name: '桃哈多 焦糖粟米條', category: 'other', weight: '4 x 10g', price: 18 },
+            { id: 149, name: '桃哈多 嬰孩粟米圈 - 輕鹽味', category: 'other', weight: '25g', price: 8 },
+            { id: 150, name: '桃哈多 麵包超人粟米薯脆小食 - 鹽味', category: 'other', weight: '4 x 44g', price: 18 },
+            { id: 151, name: '桃哈多 Poteco 薯圈 - 鹽味', category: 'other', weight: '23g', price: 8 },
+            { id: 152, name: '桃哈多 Poteko 薯圈 - 淡鹽味', category: 'other', weight: '5 x 44g', price: 18 },
+            { id: 153, name: '桃哈多 Poteco 迷你薯圈 - 鹽味', category: 'other', weight: '4 x 14g', price: 18 },
 
-            // ===== 飲品 - 運動及能量 =====
-            { id: 38, name: '寶礦力水特電解質補充飲料', name_en: 'Pocari Sweat Electrolyte Drink', name_cn: '宝矿力水特电解质补充饮料', category: 'drink', weight: '500ml', price: 10 },
-            { id: 39, name: '水動樂 電解質補充飲品', name_en: 'Aquarius Electrolyte Drink', name_cn: '水动乐 电解质补充饮品', category: 'drink', weight: '500ml', price: 9 },
-            { id: 40, name: 'RED BULL 能量飲品', name_en: 'Red Bull Energy Drink', name_cn: 'RED BULL 能量饮品', category: 'drink', weight: '250ml', price: 18 },
-            { id: 41, name: 'Monster 碳酸能量飲料', name_en: 'Monster Energy Drink', name_cn: 'Monster 碳酸能量饮料', category: 'drink', weight: '355ml', price: 20 },
+            // ===== 咖啡·茶 (coffee_tea) 63件 =====
+            { id: 154, name: 'UCC 牛奶咖啡', category: 'coffee_tea', weight: '375g', price: 15 },
+            { id: 155, name: 'UCC 黑咖啡 (無糖)', category: 'coffee_tea', weight: '275g', price: 15 },
+            { id: 156, name: 'UCC Smooth & Clear 無糖黑咖啡', category: 'coffee_tea', weight: '375g', price: 16 },
+            { id: 157, name: 'UCC 冷泡黑咖啡', category: 'coffee_tea', weight: '500ml', price: 18 },
+            { id: 158, name: 'UCC 烘焙拿鐵咖啡', category: 'coffee_tea', weight: '450ml', price: 16 },
+            { id: 159, name: 'UCC 冷萃拿鐵咖啡', category: 'coffee_tea', weight: '500ml', price: 18 },
+            { id: 160, name: 'UCC 咖啡', category: 'coffee_tea', weight: '185g', price: 12 },
+            { id: 161, name: 'UCC 低糖咖啡', category: 'coffee_tea', weight: '185g', price: 12 },
+            { id: 162, name: '朝日極特濃牛奶咖啡', category: 'coffee_tea', weight: '370g', price: 18 },
+            { id: 163, name: '朝日微糖咖啡', category: 'coffee_tea', weight: '370g', price: 16 },
+            { id: 164, name: '朝日黑咖啡', category: 'coffee_tea', weight: '400ml', price: 15 },
+            { id: 165, name: '麒麟 Fire One Day 咖啡 (無糖)', category: 'coffee_tea', weight: '600ml', price: 15 },
+            { id: 166, name: '可口可樂 綾田咖啡抹茶拿鐵', category: 'coffee_tea', weight: '440ml', price: 14 },
+            { id: 167, name: '麒麟 午後紅茶 皇家混合茶拿鐵', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 168, name: '麒麟 午後之紅茶 - 奶茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 169, name: '麒麟 午後紅茶 奶茶 - 無糖', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 170, name: '麒麟 午後之紅茶 - 檸檬茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 171, name: '麒麟 午後之紅茶 - 無糖檸檬茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 172, name: '麒麟 午後紅茶 香橙西柚冰茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 173, name: '麒麟 午後紅茶 白提子檸檬冰茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 174, name: '朝日 濃味十六茶', category: 'coffee_tea', weight: '630ml', price: 14 },
+            { id: 175, name: '朝日 無咖啡因十六茶', category: 'coffee_tea', weight: '660ml', price: 14 },
+            { id: 176, name: '朝日 十六茶 - 無咖啡因麥茶', category: 'coffee_tea', weight: '660ml', price: 14 },
+            { id: 177, name: '朝日 幫助膳食脂肪烏龍茶', category: 'coffee_tea', weight: '600ml', price: 14 },
+            { id: 178, name: '朝日 颯 綠茶', category: 'coffee_tea', weight: '620ml', price: 14 },
+            { id: 179, name: '綾鷹 濃綠茶', category: 'coffee_tea', weight: '620ml', price: 15 },
+            { id: 180, name: '綾鷹 特選綠茶', category: 'coffee_tea', weight: '500ml', price: 15 },
+            { id: 181, name: '可口可樂 大麥茶', category: 'coffee_tea', weight: '600ml', price: 10 },
+            { id: 182, name: '伊藤園 無糖綠茶', category: 'coffee_tea', weight: '500ml', price: 10 },
+            { id: 183, name: '伊藤園 無糖濃綠茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 184, name: '伊藤園 無糖玄米茶', category: 'coffee_tea', weight: '500ml', price: 10 },
+            { id: 185, name: '伊藤園 濃味綠茶', category: 'coffee_tea', weight: '2L', price: 18 },
+            { id: 186, name: '伊藤園 礦物質麥茶', category: 'coffee_tea', weight: '350ml', price: 8 },
+            { id: 187, name: '伊藤園 黃金烏龍茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 188, name: '伊藤園 黑豆茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 189, name: '伊藤園 兒茶素茉莉茶', category: 'coffee_tea', weight: '350ml', price: 10 },
+            { id: 190, name: '伊藤園 兒茶素烏龍茶', category: 'coffee_tea', weight: '350ml', price: 10 },
+            { id: 191, name: '伊右衛門 綠茶', category: 'coffee_tea', weight: '600ml', price: 14 },
+            { id: 192, name: '伊右衛門 濃味綠茶', category: 'coffee_tea', weight: '600ml', price: 15 },
+            { id: 193, name: '伊右衛門 糖質對策綠茶', category: 'coffee_tea', weight: '500ml', price: 15 },
+            { id: 194, name: '伊右衛門 特茶 - 焙茶', category: 'coffee_tea', weight: '500ml', price: 14 },
+            { id: 195, name: '伊右衛門 特茶 - 茉莉花茶', category: 'coffee_tea', weight: '500ml', price: 14 },
+            { id: 196, name: '伊右衛門 奢華茉莉花茶', category: 'coffee_tea', weight: '600ml', price: 16 },
+            { id: 197, name: '伊右衛門 特茶 - 含槲皮素', category: 'coffee_tea', weight: '500ml', price: 15 },
+            { id: 198, name: 'SUNTORY 伊右衛門 京都混合茶', category: 'coffee_tea', weight: '600ml', price: 14 },
+            { id: 199, name: 'SUNTORY 特茶 - 混合麥茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 200, name: '麒麟 午後紅茶 無糖伯爵冰紅茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 201, name: '麒麟 午後之紅茶', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 202, name: '麒麟 午後紅茶濃味紅茶 - 無糖', category: 'coffee_tea', weight: '500ml', price: 12 },
+            { id: 203, name: '麒麟 健康綠茶', category: 'coffee_tea', weight: '350ml', price: 8 },
+            { id: 204, name: '麒麟 「生茶」日本綠茶', category: 'coffee_tea', weight: '525ml', price: 14 },
+            { id: 205, name: '麒麟 「生茶」日本焙茶', category: 'coffee_tea', weight: '525ml', price: 14 },
+            { id: 206, name: '麒麟 生茶 - 免疫護理', category: 'coffee_tea', weight: '525ml', price: 15 },
+            { id: 207, name: '麒麟生茶濃茶飲料', category: 'coffee_tea', weight: '400ml', price: 12 },
+            { id: 208, name: '麒麟 溫和生茶 - 無咖啡因', category: 'coffee_tea', weight: '430ml', price: 12 },
+            { id: 209, name: 'SUNTORY 烏龍茶', category: 'coffee_tea', weight: '600ml', price: 12 },
+            { id: 210, name: 'SUNTORY 健康黑烏龍茶', category: 'coffee_tea', weight: '350ml', price: 10 },
+            { id: 211, name: '三得利 芝麻麥茶', category: 'coffee_tea', weight: '350ml', price: 10 },
+            { id: 212, name: 'SUNTORY 烏龍茶', category: 'coffee_tea', weight: '1050ml', price: 18 },
+            { id: 213, name: 'SUNTORY 黑烏龍茶', category: 'coffee_tea', weight: '1050ml', price: 18 },
+            { id: 214, name: 'SUNTORY 芝麻麥茶', category: 'coffee_tea', weight: '1050ml', price: 18 },
+            { id: 215, name: 'SUNTORY 芝麻麥茶', category: 'coffee_tea', weight: '650ml', price: 12 },
+            { id: 216, name: '爽健美茶 香醇麥茶', category: 'coffee_tea', weight: '650ml', price: 12 },
 
-            // ===== 飲品 - 即飲果汁 =====
-            { id: 42, name: '野菜生活100 甘筍蔬果汁', name_en: 'Yasai Seikatsu 100 Carrot Juice', name_cn: '野菜生活100 甘笋蔬果汁', category: 'drink', weight: '200ml', price: 12 },
-            { id: 43, name: '野菜生活100 提子蔬果汁', name_en: 'Yasai Seikatsu 100 Grape Juice', name_cn: '野菜生活100 提子蔬果汁', category: 'drink', weight: '200ml', price: 12 },
-            { id: 44, name: '三得利 Natchan 蘋果汁飲料', name_en: 'Suntory Natchan Apple Juice', name_cn: '三得利 Natchan 苹果汁饮料', category: 'drink', weight: '425ml', price: 14 },
+            // ===== 運動·能量 (energy) 28件 =====
+            { id: 217, name: '寶礦力水特電解質補充飲料', category: 'energy', weight: '500ml', price: 10 },
+            { id: 218, name: '寶礦力水特 低卡路里電解水飲料', category: 'energy', weight: '500ml', price: 10 },
+            { id: 219, name: '水動樂 電解質補充飲品', category: 'energy', weight: '500ml', price: 9 },
+            { id: 220, name: '水動樂 零系電解質補充飲品', category: 'energy', weight: '500ml', price: 9 },
+            { id: 221, name: 'HOUSE WELLNESS You C1000 維他命檸檬健康飲料', category: 'energy', weight: '140ml', price: 12 },
+            { id: 222, name: 'HOUSE WELLNESS You C1000 維他命香橙健康飲料', category: 'energy', weight: '140ml', price: 12 },
+            { id: 223, name: 'HOUSE WELLNESS You C1000 維他命蘋果健康飲料', category: 'energy', weight: '140ml', price: 12 },
+            { id: 224, name: 'HOUSE WELLNESS You C1000 維他命檸檬健康飲料', category: 'energy', weight: '500ml', price: 15 },
+            { id: 225, name: 'HOUSE WELLNESS You C1000 維他命香橙健康飲料', category: 'energy', weight: '500ml', price: 15 },
+            { id: 226, name: '札幌飲料 Mukumi 有氣檸檬汁', category: 'energy', weight: '155ml', price: 10 },
+            { id: 227, name: '札幌飲料 Mukumi 有氣檸檬汁', category: 'energy', weight: '155ml', price: 10 },
+            { id: 228, name: '札幌飲料 有氣檸檬汁', category: 'energy', weight: '155ml', price: 10 },
+            { id: 229, name: '札幌飲料 雙重檸檬酸飲品', category: 'energy', weight: '500ml', price: 12 },
+            { id: 230, name: '札幌飲料 無糖檸檬酸飲品', category: 'energy', weight: '490ml', price: 12 },
+            { id: 231, name: '札幌飲料 檸檬酸飲品', category: 'energy', weight: '525ml', price: 12 },
+            { id: 232, name: 'RED BULL 能量飲品', category: 'energy', weight: '250ml', price: 18 },
+            { id: 233, name: 'RED BULL 能量飲品', category: 'energy', weight: '355ml', price: 22 },
+            { id: 234, name: 'RED BULL 無糖能量飲品', category: 'energy', weight: '250ml', price: 18 },
+            { id: 235, name: 'RED BULL 蘋果葡萄有汽能量飲品', category: 'energy', weight: '250ml', price: 18 },
+            { id: 236, name: 'RED BULL 柚子碳酸有汽能量飲品', category: 'energy', weight: '250ml', price: 18 },
+            { id: 237, name: 'RED BULL 紫色版巨峰提子味能量飲料', category: 'energy', weight: '250ml', price: 18 },
+            { id: 238, name: 'Monster 碳酸能量飲料', category: 'energy', weight: '355ml', price: 20 },
+            { id: 239, name: 'Monster 超越碳酸能量飲料', category: 'energy', weight: '355ml', price: 20 },
+            { id: 240, name: 'Monster 超越幻紫碳酸能量飲料', category: 'energy', weight: '355ml', price: 20 },
+            { id: 241, name: 'Monster 超越蜜桃閃耀碳酸能量飲料', category: 'energy', weight: '355ml', price: 20 },
+            { id: 242, name: 'Monster 芒果狂歡碳酸能量飲料', category: 'energy', weight: '355ml', price: 20 },
+            { id: 243, name: 'Monster 澳式檸檬碳酸能量飲料', category: 'energy', weight: '355ml', price: 20 },
+            { id: 244, name: '奧樂蜜c維他命碳酸飲品', category: 'energy', weight: '6 X 120ml', price: 28 },
 
-            // ===== 飲品 - 碳酸飲料 =====
-            { id: 45, name: '可口可樂 可樂 (罐裝)', name_en: 'Coca-Cola Can', name_cn: '可口可乐 可乐 (罐装)', category: 'drink', weight: '350ml', price: 8 },
-            { id: 46, name: '可口可樂 可樂 (樽裝)', name_en: 'Coca-Cola Bottle', name_cn: '可口可乐 可乐 (樽装)', category: 'drink', weight: '500ml', price: 12 },
-            { id: 47, name: 'SPRITE 汽水 (樽裝)', name_en: 'Sprite Bottle', name_cn: 'SPRITE 汽水 (樽装)', category: 'drink', weight: '500ml', price: 12 },
-            { id: 48, name: '百事可樂 (日本)', name_en: 'Pepsi Cola (Japan)', name_cn: '百事可乐 (日本)', category: 'drink', weight: '340ml', price: 10 },
-            { id: 49, name: '樂天 忌廉溝鮮奶', name_en: 'Lotte Cream Soda Milk', name_cn: '乐天 忌廉沟鲜奶', category: 'drink', weight: '250ml', price: 14 },
+            // ===== 果汁 (juice) 20件 =====
+            { id: 245, name: '野菜生活100 甘筍蔬果汁 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 246, name: '野菜生活100 提子蔬果汁 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 247, name: '野菜生活100 芒果蔬果汁 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 248, name: '野菜生活100 蘋果蔬果汁 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 249, name: '野菜一日營 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 250, name: '100% 純正番茄汁 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 251, name: '100% 純正甘筍汁 (紙盒裝)', category: 'juice', weight: '200ml', price: 12 },
+            { id: 252, name: '野菜生活100 甘筍蔬果汁 (樽裝)', category: 'juice', weight: '280ml', price: 15 },
+            { id: 253, name: '野菜生活100 提子蔬果汁 (樽裝)', category: 'juice', weight: '280ml', price: 15 },
+            { id: 254, name: '野菜生活100 芒果蔬果汁 (樽裝)', category: 'juice', weight: '280ml', price: 15 },
+            { id: 255, name: '野菜一日營 (樽裝)', category: 'juice', weight: '280ml', price: 15 },
+            { id: 256, name: '100% 純正番茄汁 (樽裝)', category: 'juice', weight: '280ml', price: 15 },
+            { id: 257, name: '廣島香橙蔬果汁 (季節限定)', category: 'juice', weight: '195ml', price: 14 },
+            { id: 258, name: '愛媛瀨戶香&椪柑蔬果汁 (季節限定)', category: 'juice', weight: '195ml', price: 14 },
+            { id: 259, name: '有田蜜柑蔬果汁 (季節限定)', category: 'juice', weight: '195ml', price: 14 },
+            { id: 260, name: '熊本不知火柑蔬果汁 (季節限定)', category: 'juice', weight: '195ml', price: 14 },
+            { id: 261, name: '岡山貓眼提子蔬果汁 (季節限定)', category: 'juice', weight: '195ml', price: 14 },
+            { id: 262, name: '三得利 Natchan 蘋果汁飲料', category: 'juice', weight: '425ml', price: 14 },
+            { id: 263, name: 'SUNTORY Natchan橙汁飲品', category: 'juice', weight: '160g', price: 10 },
+            { id: 264, name: '不二家 NECTAR 白桃果汁', category: 'juice', weight: '380g', price: 22 },
+
+            // ===== 碳酸飲料 (soda) 17件 =====
+            { id: 265, name: '可口可樂 可樂 (罐裝)', category: 'soda', weight: '350ml', price: 8 },
+            { id: 266, name: '可口可樂 檸檬味可口可樂 (高罐裝)', category: 'soda', weight: '330ml', price: 9 },
+            { id: 267, name: '可口可樂 可樂 (樽裝)', category: 'soda', weight: '500ml', price: 12 },
+            { id: 268, name: '可口可樂 零系可樂 (樽裝)', category: 'soda', weight: '500ml', price: 12 },
+            { id: 269, name: '可口可樂 可樂 Plus (樽裝)', category: 'soda', weight: '470ml', price: 12 },
+            { id: 270, name: '可口可樂 檸檬味可口可樂 (樽裝)', category: 'soda', weight: '500ml', price: 12 },
+            { id: 271, name: 'SPRITE 汽水 (樽裝)', category: 'soda', weight: '500ml', price: 12 },
+            { id: 272, name: 'SCHWEPPES 忌廉梳打 (樽裝)', category: 'soda', weight: '500ml', price: 12 },
+            { id: 273, name: '百事可樂 (日本)', category: 'soda', weight: '340ml', price: 10 },
+            { id: 274, name: '百事零系可樂 (日本)', category: 'soda', weight: '340ml', price: 10 },
+            { id: 275, name: '百事特別零系可樂 (日本)', category: 'soda', weight: '490ml', price: 12 },
+            { id: 276, name: '百事生可樂 (日本)', category: 'soda', weight: '600ml', price: 14 },
+            { id: 277, name: '百事可樂 零系生可樂 (日本)', category: 'soda', weight: '600ml', price: 14 },
+            { id: 278, name: '百事大零生可樂 - 檸檬口味 (日本)', category: 'soda', weight: '600ml', price: 14 },
+            { id: 279, name: '樂天 忌廉溝鮮奶 (奶類碳酸飲品)', category: 'soda', weight: '250ml', price: 14 },
+            { id: 280, name: '樂天 零卡忌廉溝鮮奶 (奶類碳酸飲品)', category: 'soda', weight: '250ml', price: 14 },
+            { id: 281, name: '樂天 忌廉溝鮮奶 - 提子味 (碳酸飲品)', category: 'soda', weight: '250ml', price: 14 },
         ];
 
         // ============================================================
-        // 2. 語言資料庫
+        // 2. 全域變數
         // ============================================================
-        const translations = {
+        let currentLang = 'zh-HK';
+        let currentCategory = 'all';
+        let currentUser = null;
+        let cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+        let favoriteItems = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+        const langData = {
             'zh-HK': {
-                siteTitle: '🍭 零食站',
-                cartLabel: '購物車',
-                navHome: '🏠 首頁',
-                navBiscuit: '餅乾',
-                navChip: '薯片',
-                navChocolate: '朱古力',
-                navOther: '其他',
-                navDrink: '飲品',
-                navAbout: '關於我哋',
-                bannerTitle: '夏日優惠 · 全場 8 折',
-                bannerSub: '買滿 $200 即享折扣',
-                searchPlaceholder: '🔎 搜尋零食或飲品...',
-                searchBtn: '搜尋',
-                productsTitle: '🔥 人氣推介',
-                addToCart: '加入購物車',
+                addToCart: '🛒 加入購物車',
+                emptyCart: '購物車目前空空如也',
+                emptyFavorite: '我的最愛空空如也',
+                total: '總計',
+                clearCart: '🗑️ 清空',
+                checkout: '💳 結帳',
                 cartTitle: '🛒 購物車',
-                emptyCart: '購物車目前空空如也 🛒',
-                cartTotal: '總計',
-                clearCart: '清空購物車',
-                checkout: '結帳',
-                footerText: '© 2026 零食站 · 靜態示範',
-                toastAdded: '✅ 已加入購物車',
-                toastEmpty: '購物車係空㗎，揀啲嘢先啦！',
-                toastCheckout: '多謝幫襯！呢度之後會連接付款系統 💳',
-                toastClearConfirm: '確定要清空購物車嗎？',
+                favoriteTitle: '❤️ 我的最愛',
+                pleaseLogin: '請先登入',
+                cartAddSuccess: '已加入購物車',
+                cartRemoveSuccess: '已移除',
+                favoriteAdd: '已加入我的最愛 ❤️',
+                favoriteRemove: '已移除我的最愛 💔',
+                login: '登入',
+                register: '註冊',
+                logout: '登出',
+                guest: '訪客',
+                searchPlaceholder: '搜尋零食或飲品...',
+                searchBtn: '搜尋',
+                bannerBadge: '🎉 限時優惠',
+                bannerTitle: '夏日狂歡 · 全場 8 折',
+                bannerSub: '買滿 $200 即享折扣優惠，仲有免費送貨！',
+                sectionTitle: '🔥 人氣推介',
+                footerText: '© 2026 零食站 · 專營零食飲品',
+                loginTitle: '會員登入',
+                registerTitle: '會員註冊',
+                username: '用戶名',
+                email: '電郵',
+                password: '密碼',
+                confirmPassword: '確認密碼',
+                loginSubmit: '登入',
+                registerSubmit: '註冊',
+                switchToRegister: '未有帳戶？立即註冊',
+                switchToLogin: '已有帳戶？返回登入',
+                loginSuccess: '登入成功！',
+                loginFail: '用戶名或密碼錯誤',
+                registerSuccess: '註冊成功！請登入',
+                registerFail: '註冊失敗',
+                cartClearConfirm: '確定要清空購物車嗎？',
+                checkoutConfirm: '多謝幫襯！總金額：',
             },
             'zh-CN': {
-                siteTitle: '🍭 零食站',
-                cartLabel: '购物车',
-                navHome: '🏠 首页',
-                navBiscuit: '饼干',
-                navChip: '薯片',
-                navChocolate: '朱古力',
-                navOther: '其他',
-                navDrink: '饮品',
-                navAbout: '关于我们',
-                bannerTitle: '夏日优惠 · 全场 8 折',
-                bannerSub: '买满 $200 即享折扣',
-                searchPlaceholder: '🔎 搜索零食或饮品...',
-                searchBtn: '搜索',
-                productsTitle: '🔥 人气推荐',
-                addToCart: '加入购物车',
+                addToCart: '🛒 加入购物车',
+                emptyCart: '购物车目前空空如也',
+                emptyFavorite: '我的最爱空空如也',
+                total: '总计',
+                clearCart: '🗑️ 清空',
+                checkout: '💳 结账',
                 cartTitle: '🛒 购物车',
-                emptyCart: '购物车目前空空如也 🛒',
-                cartTotal: '总计',
-                clearCart: '清空购物车',
-                checkout: '结账',
-                footerText: '© 2026 零食站 · 静态示范',
-                toastAdded: '✅ 已加入购物车',
-                toastEmpty: '购物车是空的，先选些东西吧！',
-                toastCheckout: '感谢惠顾！这里之后会连接付款系统 💳',
-                toastClearConfirm: '确定要清空购物车吗？',
+                favoriteTitle: '❤️ 我的最爱',
+                pleaseLogin: '请先登录',
+                cartAddSuccess: '已加入购物车',
+                cartRemoveSuccess: '已移除',
+                favoriteAdd: '已加入我的最爱 ❤️',
+                favoriteRemove: '已移除我的最爱 💔',
+                login: '登录',
+                register: '注册',
+                logout: '退出',
+                guest: '访客',
+                searchPlaceholder: '搜索零食或饮品...',
+                searchBtn: '搜索',
+                bannerBadge: '🎉 限时优惠',
+                bannerTitle: '夏日狂欢 · 全场 8 折',
+                bannerSub: '买满 $200 即享折扣优惠，还有免费送货！',
+                sectionTitle: '🔥 人气推荐',
+                footerText: '© 2026 零食站 · 专营零食饮品',
+                loginTitle: '会员登录',
+                registerTitle: '会员注册',
+                username: '用户名',
+                email: '电邮',
+                password: '密码',
+                confirmPassword: '确认密码',
+                loginSubmit: '登录',
+                registerSubmit: '注册',
+                switchToRegister: '没有账号？立即注册',
+                switchToLogin: '已有账号？返回登录',
+                loginSuccess: '登录成功！',
+                loginFail: '用户名或密码错误',
+                registerSuccess: '注册成功！请登录',
+                registerFail: '注册失败',
+                cartClearConfirm: '确定要清空购物车吗？',
+                checkoutConfirm: '感谢惠顾！总金额：',
             },
             'en': {
-                siteTitle: '🍭 Snack Station',
-                cartLabel: 'Cart',
-                navHome: '🏠 Home',
-                navBiscuit: 'Biscuits',
-                navChip: 'Chips',
-                navChocolate: 'Chocolate',
-                navOther: 'Others',
-                navDrink: 'Drinks',
-                navAbout: 'About Us',
-                bannerTitle: 'Summer Sale · 20% Off',
-                bannerSub: 'Free delivery on orders over $200',
-                searchPlaceholder: '🔎 Search snacks or drinks...',
-                searchBtn: 'Search',
-                productsTitle: '🔥 Bestsellers',
-                addToCart: 'Add to Cart',
+                addToCart: '🛒 Add to Cart',
+                emptyCart: 'Your cart is empty',
+                emptyFavorite: 'Your favorites is empty',
+                total: 'Total',
+                clearCart: '🗑️ Clear',
+                checkout: '💳 Checkout',
                 cartTitle: '🛒 Shopping Cart',
-                emptyCart: 'Your cart is empty 🛒',
-                cartTotal: 'Total',
-                clearCart: 'Clear Cart',
-                checkout: 'Checkout',
-                footerText: '© 2026 Snack Station · Static Demo',
-                toastAdded: '✅ Added to cart',
-                toastEmpty: 'Your cart is empty, please add some items!',
-                toastCheckout: 'Thank you! This will connect to payment system 💳',
-                toastClearConfirm: 'Are you sure you want to clear the cart?',
+                favoriteTitle: '❤️ My Favorites',
+                pleaseLogin: 'Please login first',
+                cartAddSuccess: 'Added to cart',
+                cartRemoveSuccess: 'Removed',
+                favoriteAdd: 'Added to favorites ❤️',
+                favoriteRemove: 'Removed from favorites 💔',
+                login: 'Login',
+                register: 'Register',
+                logout: 'Logout',
+                guest: 'Guest',
+                searchPlaceholder: 'Search snacks or drinks...',
+                searchBtn: 'Search',
+                bannerBadge: '🎉 Limited Offer',
+                bannerTitle: 'Summer Sale · 20% Off',
+                bannerSub: 'Free delivery on orders over $200!',
+                sectionTitle: '🔥 Bestsellers',
+                footerText: '© 2026 Snack Station · Snacks & Drinks',
+                loginTitle: 'Login',
+                registerTitle: 'Register',
+                username: 'Username',
+                email: 'Email',
+                password: 'Password',
+                confirmPassword: 'Confirm Password',
+                loginSubmit: 'Login',
+                registerSubmit: 'Register',
+                switchToRegister: 'No account? Register now',
+                switchToLogin: 'Have an account? Login',
+                loginSuccess: 'Login successful!',
+                loginFail: 'Invalid username or password',
+                registerSuccess: 'Registration successful! Please login.',
+                registerFail: 'Registration failed.',
+                cartClearConfirm: 'Are you sure to clear cart?',
+                checkoutConfirm: 'Thank you! Total: ',
             }
         };
 
         // ============================================================
-        // 3. 當前語言 & 購物車
+        // 3. 渲染產品（核心功能）
         // ============================================================
-        let currentLang = 'zh-HK';
-        let cart = [];
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const count = document.getElementById('productCount');
+            const msg = document.getElementById('searchMsg');
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            const t = langData[currentLang];
 
-        // ============================================================
-        // 4. DOM 參考
-        // ============================================================
-        const cartCount = document.getElementById('cartCount');
-        const cartSidebar = document.getElementById('cartSidebar');
-        const cartOverlay = document.getElementById('cartOverlay');
-        const cartItemsContainer = document.getElementById('cartItems');
-        const cartTotal = document.getElementById('cartTotal');
-        const cartToggle = document.getElementById('cartToggle');
-        const closeCartBtn = document.getElementById('closeCart');
-        const clearCartBtn = document.getElementById('clearCart');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        const productGrid = document.getElementById('productGrid');
-
-        // ============================================================
-        // 5. 顯示產品
-        // ============================================================
-        function renderProducts(filterCategory = 'all', keyword = '') {
-            let filtered = products;
-
-            // 分類過濾
-            if (filterCategory !== 'all') {
-                filtered = filtered.filter(p => p.category === filterCategory);
+            let filtered = allProducts;
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
+            if (keyword) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(keyword));
             }
 
-            // 關鍵字搜尋
-            if (keyword.trim() !== '') {
-                const kw = keyword.toLowerCase();
-                filtered = filtered.filter(p => 
-                    p.name.toLowerCase().includes(kw) || 
-                    p.name_en.toLowerCase().includes(kw) || 
-                    p.name_cn.includes(kw)
-                );
+            count.textContent = `共 ${filtered.length} 件商品`;
+            if (keyword) {
+                msg.textContent = `🔍 搜尋「${keyword}」嘅結果：${filtered.length} 件`;
+            } else if (currentCategory !== 'all') {
+                const catNames = {
+                    'biscuit': '🍪 餅乾',
+                    'chip': '🥔 薯片',
+                    'chocolate': '🍫 朱古力',
+                    'candy': '🍬 糖果',
+                    'other': '🍢 其他',
+                    'coffee_tea': '☕ 咖啡·茶',
+                    'energy': '⚡ 運動·能量',
+                    'juice': '🍊 果汁',
+                    'soda': '🥤 碳酸飲料'
+                };
+                msg.textContent = `📂 分類：${catNames[currentCategory] || currentCategory}`;
+            } else {
+                msg.textContent = '';
             }
 
             if (filtered.length === 0) {
-                productGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">沒有找到相關產品</p>`;
+                grid.innerHTML = `<div class="empty-state"><span class="emoji">😅</span>沒有找到相關產品</div>`;
                 return;
             }
 
             let html = '';
             filtered.forEach(p => {
+                const isHot = p.price >= 20;
+                const isFav = favoriteItems.some(f => f.id === p.id);
                 html += `
-                    <div class="card" data-id="${p.id}" data-name="${p.name}" data-category="${p.category}" data-price="${p.price}">
-                        <div class="box" style="background:${getColorByCategory(p.category)};"></div>
+                    <div class="card">
+                        ${isHot ? '<span class="badge-hot">🔥 熱賣</span>' : ''}
+                        <div class="card-image">
+                            <img src="https://picsum.photos/seed/${p.id}/300/300" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\"fallback-emoji\">🍭</span>';" />
+                        </div>
                         <h4>${p.name}</h4>
                         <p class="product-weight">${p.weight}</p>
-                        <p class="product-price">$${p.price}</p>
-                        <button class="add-to-cart" data-key="addToCart">加入購物車</button>
+                        <p class="product-price">$${p.price.toFixed(2)}</p>
+                        <div class="card-actions">
+                            <button class="add-to-cart" onclick="addToCart(${p.id})">${t.addToCart}</button>
+                            <button class="favorite-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(${p.id})">${isFav ? '❤️' : '🤍'}</button>
+                        </div>
                     </div>
                 `;
             });
-            productGrid.innerHTML = html;
+            grid.innerHTML = html;
+        }
 
-            // 重新綁定加入購物車事件
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const card = this.closest('.card');
-                    const id = parseInt(card.dataset.id);
-                    const name = card.dataset.name;
-                    const price = parseInt(card.dataset.price);
+        // ============================================================
+        // 4. 分類與搜尋
+        // ============================================================
+        function filterCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            if (element) element.classList.add('active');
+            renderProducts();
+        }
 
-                    const existing = cart.find(item => item.id === id);
-                    if (existing) {
-                        existing.qty += 1;
-                    } else {
-                        cart.push({ id, name, price, qty: 1 });
-                    }
+        document.getElementById('searchBtn').addEventListener('click', renderProducts);
+        document.getElementById('searchInput').addEventListener('keyup', function (e) {
+            if (e.key === 'Enter') renderProducts();
+        });
 
-                    updateCartUI();
-                    showTemporaryMessage(`${translations[currentLang].toastAdded} ${name}`);
+        // ============================================================
+        // 5. 購物車功能
+        // ============================================================
+        function saveCart() { localStorage.setItem('cart', JSON.stringify(cartItems)); updateCartUI(); }
+
+        function addToCart(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            const exist = cartItems.find(item => item.id === productId);
+            if (exist) { exist.quantity += 1; } else {
+                cartItems.push({
+                    id: productId, name: product.name, price: product.price,
+                    quantity: 1
                 });
-            });
+            }
+            saveCart();
+            showToast(`${product.name} ${langData[currentLang].cartAddSuccess}`);
         }
 
-        function getColorByCategory(category) {
-            const colors = {
-                'biscuit': '#f9d56e',
-                'chip': '#f5b895',
-                'chocolate': '#c9b1a0',
-                'other': '#9fd9b2',
-                'drink': '#7ec8e3'
-            };
-            return colors[category] || '#ddd';
+        function removeCartItem(productId) {
+            cartItems = cartItems.filter(item => item.id !== productId);
+            saveCart();
+            showToast(langData[currentLang].cartRemoveSuccess);
         }
 
-        // ============================================================
-        // 6. 語言切換
-        // ============================================================
-        function switchLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.dataset.key;
-                if (t[key] !== undefined) {
-                    if (el.tagName === 'INPUT' && key === 'searchPlaceholder') {
-                        el.placeholder = t[key];
-                    } else {
-                        el.textContent = t[key];
-                    }
-                }
-            });
-
-            document.getElementById('cartLabel').textContent = t.cartLabel;
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-
-            // 重新顯示產品（更新「加入購物車」文字）
-            renderProducts(currentCategory, currentKeyword);
+        function updateCartQty(productId, delta) {
+            const item = cartItems.find(i => i.id === productId);
+            if (!item) return;
+            item.quantity += delta;
+            if (item.quantity <= 0) { removeCartItem(productId); return; }
+            saveCart();
         }
 
-        // ============================================================
-        // 7. 購物車功能
-        // ============================================================
+        function clearCart() {
+            if (cartItems.length === 0) return;
+            if (confirm(langData[currentLang].cartClearConfirm)) {
+                cartItems = [];
+                saveCart();
+                showToast('🗑️ 購物車已清空');
+            }
+        }
+
         function updateCartUI() {
-            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-            cartCount.textContent = totalItems;
+            const totalItems = cartItems.reduce((s, i) => s + i.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+            document.getElementById('cartItemCount').textContent = `(${totalItems})`;
+            const totalPrice = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
+            document.getElementById('cartTotal').textContent = `$${totalPrice.toFixed(2)}`;
             renderCartItems();
-
-            const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-            cartTotal.textContent = `$${totalPrice}`;
         }
 
         function renderCartItems() {
-            const t = translations[currentLang];
-
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `<p class="empty-cart">${t.emptyCart}</p>`;
+            const container = document.getElementById('cartItems');
+            const t = langData[currentLang];
+            if (cartItems.length === 0) {
+                container.innerHTML = `<div class="empty-cart"><span class="big-emoji">🛒</span>${t.emptyCart}</div>`;
                 return;
             }
-
             let html = '';
-            cart.forEach((item, index) => {
+            cartItems.forEach(item => {
                 html += `
                     <div class="cart-item">
                         <span class="cart-item-name">${item.name}</span>
                         <div class="cart-item-controls">
-                            <button class="qty-btn" data-index="${index}" data-action="decrease">−</button>
-                            <span class="cart-item-qty">${item.qty}</span>
-                            <button class="qty-btn" data-index="${index}" data-action="increase">+</button>
-                            <button class="cart-item-remove" data-index="${index}">✕</button>
+                            <button onclick="updateCartQty(${item.id}, -1)">−</button>
+                            <span class="cart-item-qty">${item.quantity}</span>
+                            <button onclick="updateCartQty(${item.id}, 1)">+</button>
+                            <button class="cart-item-remove" onclick="removeCartItem(${item.id})">✕</button>
                         </div>
-                        <span class="cart-item-price">$${item.price * item.qty}</span>
+                        <span class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                 `;
             });
-            cartItemsContainer.innerHTML = html;
-
-            document.querySelectorAll('.qty-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    const action = this.dataset.action;
-                    if (action === 'increase') {
-                        cart[index].qty += 1;
-                    } else if (action === 'decrease') {
-                        cart[index].qty -= 1;
-                        if (cart[index].qty <= 0) {
-                            cart.splice(index, 1);
-                        }
-                    }
-                    updateCartUI();
-                });
-            });
-
-            document.querySelectorAll('.cart-item-remove').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    cart.splice(index, 1);
-                    updateCartUI();
-                });
-            });
+            container.innerHTML = html;
         }
 
-        // ============================================================
-        // 8. 側欄開關
-        // ============================================================
-        cartToggle.addEventListener('click', () => {
-            cartSidebar.classList.add('open');
-            cartOverlay.classList.add('show');
-            renderCartItems();
+        // 購物車側欄
+        function toggleCartSidebar() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('show');
+            document.body.style.overflow = document.getElementById('cartSidebar').classList.contains('open') ? 'hidden' :
+                '';
+            updateCartUI();
+        }
+        document.getElementById('closeCart').addEventListener('click', toggleCartSidebar);
+        document.getElementById('cartOverlay').addEventListener('click', toggleCartSidebar);
+        document.getElementById('clearCart').addEventListener('click', clearCart);
+        document.getElementById('checkoutBtn').addEventListener('click', function () {
+            if (cartItems.length === 0) { showToast('🛒 購物車係空㗎'); return; }
+            const total = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
+            alert(langData[currentLang].checkoutConfirm + '$' + total.toFixed(2));
         });
 
-        function closeCart() {
-            cartSidebar.classList.remove('open');
-            cartOverlay.classList.remove('show');
+        // ============================================================
+        // 6. 收藏功能
+        // ============================================================
+        function saveFavorites() {
+            localStorage.setItem('favorites', JSON.stringify(favoriteItems));
+            updateFavoriteUI();
         }
 
-        closeCartBtn.addEventListener('click', closeCart);
-        cartOverlay.addEventListener('click', closeCart);
-
-        // ============================================================
-        // 9. 清空 & 結帳
-        // ============================================================
-        clearCartBtn.addEventListener('click', () => {
-            if (cart.length === 0) return;
-            if (confirm(translations[currentLang].toastClearConfirm)) {
-                cart = [];
-                updateCartUI();
+        function toggleFavorite(productId) {
+            const idx = favoriteItems.findIndex(f => f.id === productId);
+            if (idx > -1) {
+                favoriteItems.splice(idx, 1);
+                showToast(langData[currentLang].favoriteRemove);
+            } else {
+                const product = allProducts.find(p => p.id === productId);
+                if (product) {
+                    favoriteItems.push(product);
+                    showToast(langData[currentLang].favoriteAdd);
+                }
             }
-        });
+            saveFavorites();
+            renderProducts();
+        }
 
-        checkoutBtn.addEventListener('click', () => {
-            const t = translations[currentLang];
-            if (cart.length === 0) {
-                alert(t.toastEmpty);
+        function updateFavoriteUI() {
+            const total = favoriteItems.length;
+            document.getElementById('favoriteCount').textContent = total;
+            document.getElementById('favoriteItemCount').textContent = `(${total})`;
+            renderFavoriteItems();
+        }
+
+        function renderFavoriteItems() {
+            const container = document.getElementById('favoriteItems');
+            const t = langData[currentLang];
+            if (favoriteItems.length === 0) {
+                container.innerHTML = `<div class="empty-favorite"><span class="big-emoji">❤️</span>${t.emptyFavorite}</div>`;
                 return;
             }
-            alert(t.toastCheckout);
-        });
-
-        // ============================================================
-        // 10. 搜尋 & 分類過濾
-        // ============================================================
-        let currentCategory = 'all';
-        let currentKeyword = '';
-
-        const searchInput = document.getElementById('productSearch');
-        const msg = document.getElementById('searchResultMsg');
-
-        function filterProducts() {
-            currentKeyword = searchInput.value.trim();
-            renderProducts(currentCategory, currentKeyword);
-            const total = document.querySelectorAll('.card').length;
-            msg.textContent = currentKeyword !== '' ? `🔍 ${translations[currentLang].searchBtn}：${total} ${currentLang === 'en' ? 'items found' : '件相關商品'}` : '';
+            let html = '';
+            favoriteItems.forEach(item => {
+                html += `
+                    <div class="favorite-item">
+                        <img src="https://picsum.photos/seed/${item.id}/100/100" alt="${item.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23f5ede7%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2230%22%3E❤️%3C/text%3E%3C/svg%3E';" />
+                        <div class="favorite-item-info">
+                            <span class="favorite-item-name">${item.name}</span>
+                            <span class="favorite-item-price">$${item.price.toFixed(2)}</span>
+                        </div>
+                        <button class="favorite-item-remove" onclick="toggleFavorite(${item.id})">✕</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
         }
 
-        searchInput.addEventListener('input', filterProducts);
-        document.getElementById('searchBtn').addEventListener('click', filterProducts);
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                currentCategory = this.dataset.category;
-                searchInput.value = '';
-                msg.textContent = '';
-                renderProducts(currentCategory, '');
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+        function toggleFavoriteSidebar() {
+            document.getElementById('favoriteSidebar').classList.toggle('open');
+            document.getElementById('favoriteOverlay').classList.toggle('show');
+            document.body.style.overflow = document.getElementById('favoriteSidebar').classList.contains('open') ? 'hidden' :
+                '';
+            updateFavoriteUI();
+        }
+        document.getElementById('closeFavorite').addEventListener('click', toggleFavoriteSidebar);
+        document.getElementById('favoriteOverlay').addEventListener('click', toggleFavoriteSidebar);
 
         // ============================================================
-        // 11. Toast 提示
+        // 7. 多語言
         // ============================================================
-        function showTemporaryMessage(text) {
-            let el = document.createElement('div');
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active');
+            applyTranslations(langData[lang]);
+            renderProducts();
+            updateCartUI();
+            updateFavoriteUI();
+        }
+
+        function applyTranslations(t) {
+            document.getElementById('greetingText').innerHTML = (currentUser ? '👋 歡迎，<strong>' + currentUser.username +
+                '</strong>' : '👋 歡迎，<strong>訪客</strong>');
+            document.getElementById('loginBtn').textContent = t.login;
+            document.getElementById('registerBtn').textContent = t.register;
+            document.getElementById('logoutBtn').textContent = t.logout;
+            document.querySelector('#searchInput').placeholder = t.searchPlaceholder;
+            document.querySelector('#searchBtn').textContent = t.searchBtn;
+            document.getElementById('bannerBadge').textContent = t.bannerBadge;
+            document.getElementById('bannerTitle').textContent = t.bannerTitle;
+            document.getElementById('bannerSub').textContent = t.bannerSub;
+            document.getElementById('sectionTitle').textContent = t.sectionTitle;
+            document.getElementById('footerText').textContent = t.footerText;
+            document.querySelector('#cartSidebar .cart-header h2').innerHTML = t.cartTitle + ' <span class="count" id="cartItemCount">(0)</span>';
+            document.querySelector('#clearCart').textContent = t.clearCart;
+            document.querySelector('#checkoutBtn').textContent = t.checkout;
+            document.querySelector('#favoriteSidebar .favorite-header h2').innerHTML = t.favoriteTitle + ' <span class="count" id="favoriteItemCount">(0)</span>';
+        }
+
+        // ============================================================
+        // 8. 會員（簡易localStorage示範）
+        // ============================================================
+        function openModal(mode) {
+            document.getElementById('authModal').style.display = 'flex';
+            const container = document.getElementById('authForm');
+            const t = langData[currentLang];
+            if (mode === 'login') {
+                container.innerHTML = `
+                    <h2>${t.loginTitle}</h2>
+                    <form onsubmit="event.preventDefault(); authLogin();">
+                        <label>${t.username}</label><input type="text" id="loginUsername" required />
+                        <label>${t.password}</label><input type="password" id="loginPassword" required />
+                        <button type="submit" class="btn-submit">${t.loginSubmit}</button>
+                    </form>
+                    <p class="switch-link" onclick="openModal('register')">${t.switchToRegister}</p>
+                `;
+            } else {
+                container.innerHTML = `
+                    <h2>${t.registerTitle}</h2>
+                    <form onsubmit="event.preventDefault(); authRegister();">
+                        <label>${t.username}</label><input type="text" id="regUsername" required />
+                        <label>${t.email}</label><input type="email" id="regEmail" required />
+                        <label>${t.password}</label><input type="password" id="regPassword" required />
+                        <label>${t.confirmPassword}</label><input type="password" id="regConfirm" required />
+                        <button type="submit" class="btn-submit">${t.registerSubmit}</button>
+                    </form>
+                    <p class="switch-link" onclick="openModal('login')">${t.switchToLogin}</p>
+                `;
+            }
+        }
+
+        function closeModal() { document.getElementById('authModal').style.display = 'none'; }
+
+        function authLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                closeModal();
+                showToast(langData[currentLang].loginSuccess);
+                applyTranslations(langData[currentLang]);
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('registerBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'inline-block';
+            } else {
+                showToast(langData[currentLang].loginFail);
+            }
+        }
+
+        function authRegister() {
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const confirm = document.getElementById('regConfirm').value.trim();
+            if (password !== confirm) { showToast('密碼唔匹配'); return; }
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.username === username)) { showToast('用戶名已經存在'); return; }
+            users.push({ username, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            showToast(langData[currentLang].registerSuccess);
+            openModal('login');
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginBtn').style.display = 'inline-block';
+            document.getElementById('registerBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            applyTranslations(langData[currentLang]);
+            showToast('已登出');
+        }
+
+        // ============================================================
+        // 9. Toast 訊息
+        // ============================================================
+        function showToast(text) {
+            const existing = document.querySelector('.toast-msg');
+            if (existing) existing.remove();
+            const el = document.createElement('div');
             el.className = 'toast-msg';
             el.textContent = text;
             document.body.appendChild(el);
             setTimeout(() => {
-                el.remove();
-            }, 1800);
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(-50%) translateY(20px)';
+                setTimeout(() => el.remove(), 300);
+            }, 2000);
         }
 
         // ============================================================
-        // 12. 語言按鈕事件
+        // 10. 初始化（頁面加載後自動顯示產品）
         // ============================================================
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                switchLanguage(this.dataset.lang);
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            switchLanguage('zh-HK');
+            renderProducts();
+            updateCartUI();
+            updateFavoriteUI();
+            // 若已登入，更新界面
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    document.getElementById('loginBtn').style.display = 'none';
+                    document.getElementById('registerBtn').style.display = 'none';
+                    document.getElementById('logoutBtn').style.display = 'inline-block';
+                    applyTranslations(langData[currentLang]);
+                } catch (e) { }
+            }
+            // 監聽登入成功保存
+            const origLogin = authLogin;
+            authLogin = function () {
+                origLogin();
+                if (currentUser) localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            };
+            const origLogout = logout;
+            logout = function () {
+                origLogout();
+                localStorage.removeItem('currentUser');
+            };
         });
 
-        // ============================================================
-        // 13. 初始化
-        // ============================================================
-        switchLanguage('zh-HK');
-        renderProducts('all', '');
-        updateCartUI();
+        // 點擊 modal 外部關閉
+        document.getElementById('authModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
     </script>
 </body>
+
 </html>
